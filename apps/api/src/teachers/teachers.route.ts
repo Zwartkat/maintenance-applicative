@@ -6,7 +6,7 @@ import { getTeachers, unvote, vote } from "./teachers.controller";
 const teacherRouter = Router();
 
 teacherRouter.get("/teachers", getTeachers);
-teacherRouter.get("/vote",vote)
-teacherRouter.get("/unvote",unvote)
+teacherRouter.post("/vote",vote)
+teacherRouter.delete("/unvote",unvote)
 
 export { teacherRouter };

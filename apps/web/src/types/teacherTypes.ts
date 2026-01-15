@@ -8,4 +8,3 @@ export interface Teacher {
   downVotes?: number
 }
 
-export type VoteType = 'upvote' | 'downvote'

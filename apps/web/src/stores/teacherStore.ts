@@ -62,7 +62,7 @@ export const useTeacherStore = defineStore('teacherStore', () => {
     currentTeacher.value = teacher
   }
 
-  const vote = async (teacherId: number, voteType: VoteType, userId: number) => {
+  const vote = async (teacherId: number, voteType: boolean, userId: number) => {
     try {
       await voteForTeacher(teacherId, voteType, userId)
       return true

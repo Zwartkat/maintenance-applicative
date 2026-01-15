@@ -8,19 +8,31 @@ export const getTeachers = async (_req: Request, res: Response) => {
     res
       .status(204)
       .send({ state: 204, message: "No teacher found" });
-  else res.status(200).send(professors);
+  else {
+    // Calculate upVotes and downVotes for each professor
+    const professorsWithVotes = professors.map(professor => {
+      const upVotes = professor.vote.filter(v => v.state === true).length;
+      const downVotes = professor.vote.filter(v => v.state === false).length;
+      return {
+        ...professor,
+        upVotes,
+        downVotes,
+      };
+    });
+    res.status(200).send(professorsWithVotes);
+  }
 };
 
 export const vote = async (req: Request, res: Response) => {
   const teacherId = Number(req.query.teacher);
   const userId = Number(req.query.user);
-  const vote = Boolean(req.query.vote);
+  const vote = req.query.vote === 'true';
 
-  // To prevent problems
+  // // To prevent problems
 
-  if (!vote){
-    return res.status(403).json({status: 403,message: 'Why do you want to downvote a teacher ?'});
-  }
+  // if (!vote){
+  //   return res.status(403).json({status: 403,message: 'Why do you want to downvote a teacher ?'});
+  // }
 
   // Check if user exists
 

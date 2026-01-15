@@ -1,10 +1,32 @@
 <template>
   <div class="max-w-4xl mx-auto mt-6 p-4 max-h-[400px] overflow-y-auto teacher-table-container">
     <n-spin :show="teacherStore.isLoading">
+      <!-- Professeurs avec des votes -->
       <n-data-table
+        v-if="votedProfessors.length > 0"
         :columns="columns"
-        :data="sortedProfessors"
+        :data="votedProfessors"
         :row-class-name="rowClassName"
+        :bordered="false"
+        :show-header="false"
+        striped
+      />
+      
+      <!-- Séparateur -->
+      <div v-if="votedProfessors.length > 0 && unvotedProfessors.length > 0" class="separator-section">
+        <div class="flex items-center gap-4 py-4">
+          <div class="flex-1 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+          <span class="text-white/40 text-sm font-medium">Sans vote</span>
+          <div class="flex-1 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+        </div>
+      </div>
+      
+      <!-- Professeurs sans votes -->
+      <n-data-table
+        v-if="unvotedProfessors.length > 0"
+        :columns="columns"
+        :data="unvotedProfessors"
+        :row-class-name="() => 'unvoted-row'"
         :bordered="false"
         :show-header="false"
         striped
@@ -37,15 +59,35 @@ onMounted(() => {
   teacherStore.fetchTeachers()
 })
 
-const sortedProfessors = computed(() => {
+// Professeurs avec au moins un vote (upvote ou downvote)
+const votedProfessors = computed(() => {
   return [...teacherStore.filteredTeachers]
     .map(teacher => ({
       ...teacher,
       upVotes: teacher.upVotes ?? 0,
       downVotes: teacher.downVotes ?? 0,
     }))
+    .filter(prof => prof.upVotes > 0 || prof.downVotes > 0)
     .sort((a, b) => (b.upVotes - b.downVotes) - (a.upVotes - a.downVotes))
     .map((prof, index) => ({ ...prof, rank: index + 1 }))
+})
+
+// Professeurs sans aucun vote
+const unvotedProfessors = computed(() => {
+  return [...teacherStore.filteredTeachers]
+    .map(teacher => ({
+      ...teacher,
+      upVotes: teacher.upVotes ?? 0,
+      downVotes: teacher.downVotes ?? 0,
+    }))
+    .filter(prof => prof.upVotes === 0 && prof.downVotes === 0)
+    .sort((a, b) => a.lastName.localeCompare(b.lastName))
+    .map((prof, index) => ({ ...prof, rank: votedProfessors.value.length + index + 1 }))
+})
+
+// Garde l'ancien computed pour compatibilité
+const sortedProfessors = computed(() => {
+  return [...votedProfessors.value, ...unvotedProfessors.value]
 })
 
 function rowClassName(row: Professor & { rank: number }) {
@@ -56,17 +98,17 @@ function rowClassName(row: Professor & { rank: number }) {
 }
 
 async function upvote(prof: Professor) {
-  const userId = Number(localStorage.getItem('userId'))
+  const userId = Number(localStorage.getItem('user'))
   if (userId) {
-    await teacherStore.vote(prof.id, 'upvote', userId)
+    await teacherStore.vote(prof.id, true, userId)
     await teacherStore.fetchTeachers()
   }
 }
 
 async function downvote(prof: Professor) {
-  const userId = Number(localStorage.getItem('userId'))
+  const userId = Number(localStorage.getItem('user'))
   if (userId) {
-    await teacherStore.vote(prof.id, 'downvote', userId)
+    await teacherStore.vote(prof.id, false, userId)
     await teacherStore.fetchTeachers()
   }
 }
@@ -164,9 +206,71 @@ const columns: DataTableColumns<Professor & { rank: number }> = [
 
 :deep(.n-data-table-table tr) {
   border-radius: 8px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+:deep(.n-data-table-table tbody tr:hover) {
+  transform: scale(1.02) translateX(5px);
+  box-shadow: 0 8px 25px rgba(66, 184, 131, 0.2);
+  background-color: rgba(66, 184, 131, 0.08) !important;
+}
+
+:deep(.n-data-table-table tbody tr:hover td) {
+  background-color: rgba(66, 184, 131, 0.08) !important;
 }
 
 :deep(.n-data-table-table thead) {
   display: none;
+}
+
+/* Animation pour le changement de rang */
+:deep(.n-data-table-table tbody tr) {
+  animation: slideIn 0.4s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Effet de montée/descente */
+:deep(.rank-up) {
+  animation: rankUp 0.5s ease-out;
+}
+
+:deep(.rank-down) {
+  animation: rankDown 0.5s ease-out;
+}
+
+@keyframes rankUp {
+  0% {
+    background-color: rgba(34, 197, 94, 0.3) !important;
+    transform: translateY(20px);
+  }
+  100% {
+    background-color: transparent;
+    transform: translateY(0);
+  }
+}
+
+@keyframes rankDown {
+  0% {
+    background-color: rgba(239, 68, 68, 0.3) !important;
+    transform: translateY(-20px);
+  }
+  100% {
+    background-color: transparent;
+    transform: translateY(0);
+  }
+}
+
+.separator-section {
+  margin: 0.5rem 0;
 }
 </style>

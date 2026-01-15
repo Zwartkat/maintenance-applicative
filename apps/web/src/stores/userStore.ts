@@ -25,7 +25,7 @@ export const useUserStore = defineStore('userStore', () => {
       }
 
       if (userData['token']) token.value = userData['token']
-      if (userData['id']) userId.value = userData['id']
+      if (userData['userId']) userId.value = userData['userId']
       localStorage.setItem('token', token.value)
       localStorage.setItem('user', `${userId.value}`)
       return true

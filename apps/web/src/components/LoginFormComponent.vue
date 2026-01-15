@@ -82,8 +82,7 @@ const rules: FormRules = {
 }
 
 const handleLogin = async () => {
-    router.push('/deck-builder')
-  /*const token = await userStore.login({
+  const token = await userStore.login({
     email: modelRef.value.email,
     password: modelRef.value.password,
   })
@@ -93,14 +92,14 @@ const handleLogin = async () => {
       content: 'Connexion réussie',
       duration: 3000,
     })
-    router.push('/deck-builder')
+    router.push('/teachers')
   } else {
     notification.error({
       title: 'Erreur',
       content: 'Impossible de se connecter',
       duration: 3000,
     })
-  }*/
+  }
 }
 </script>
 <style>
