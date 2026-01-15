@@ -1,8 +1,8 @@
 openapi: 3.0.0
 info:
-  title: USER API
+  title: TEACHER VOTE API
   version: 1.0.0
-  description: API pour la gestion d'utilisateurs.
+  description: API pour voter les profs.
 
 servers:
   - url: http://localhost:3000
@@ -40,6 +40,121 @@ tags:
     description: Gestion des utilisateurs (inscription, connexion, mise à jour, suppression)
 
 paths:
+
+  /teachers:
+    get:
+      summary: Get all teachers
+      description: Retourne la liste des professeurs avec leurs votes
+      tags:
+        - Teachers
+      responses:
+        "200":
+          description: Liste des professeurs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Professor"
+        "204":
+          description: Aucun professeur trouvé
+
+  /vote:
+    post:
+      summary: Vote for a teacher
+      description: Crée ou met à jour un vote pour un professeur
+      tags:
+        - Votes
+      parameters:
+        - name: teacher
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: ID du professeur
+        - name: user
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: ID de l'utilisateur
+        - name: vote
+          in: query
+          required: true
+          schema:
+            type: boolean
+          description: Vote (true = upvote, false = downvote)
+      responses:
+        "201":
+          description: Vote créé ou mis à jour
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StatusResponse"
+        "400":
+          description: Utilisateur ou professeur inconnu
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Vote négatif refusé
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Erreur serveur
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /unvote:
+    delete:
+      summary: Remove a vote
+      description: Supprime le vote d'un utilisateur pour un professeur
+      tags:
+        - Votes
+      parameters:
+        - name: teacher
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: ID du professeur
+        - name: user
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: ID de l'utilisateur
+      responses:
+        "201":
+          description: Vote supprimé
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StatusResponse"
+        "400":
+          description: Utilisateur ou professeur inconnu
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Vote non trouvé
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Erreur serveur
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
   /users:
     post:
       summary: Crée un nouvel utilisateur
@@ -185,3 +300,23 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+
+  components:
+    schemas:
+      
+      StatusResponse:
+        type: object
+        properties:
+          status:
+            type: integer
+            example: 201
+
+      ErrorResponse:
+        type: object
+        properties:
+          status:
+            type: integer
+            example: 400
+          message:
+            type: string
+            example: Unknown user
