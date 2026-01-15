@@ -1,21 +1,27 @@
 <template>
-  <div class="max-w-4xl mx-auto mt-6 p-4">
-    <n-data-table
-      :columns="columns"
-      :data="sortedProfessors"
-      :row-class-name="rowClassName"
-      :bordered="false"
-      :show-header="false"
-      striped
-    />
+  <div class="max-w-4xl mx-auto mt-6 p-4 max-h-[400px] overflow-y-auto teacher-table-container">
+    <n-spin :show="teacherStore.isLoading">
+      <n-data-table
+        :columns="columns"
+        :data="sortedProfessors"
+        :row-class-name="rowClassName"
+        :bordered="false"
+        :show-header="false"
+        striped
+      />
+    </n-spin>
+    <n-alert v-if="teacherStore.error" type="error" class="mt-4">
+      {{ teacherStore.error }}
+    </n-alert>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, h } from 'vue'
-import { NDataTable, NButton, NSpace, NTag } from 'naive-ui'
+import { computed, h, onMounted } from 'vue'
+import { NDataTable, NButton, NSpace, NTag, NSpin, NAlert } from 'naive-ui'
 import { ArrowUpOutline, ArrowDownOutline } from '@vicons/ionicons5'
 import type { DataTableColumns } from 'naive-ui'
+import { useTeacherStore } from '../stores/teacherStore'
 
 interface Professor {
   id: number
@@ -25,35 +31,44 @@ interface Professor {
   downVotes: number
 }
 
-const professors = ref<Professor[]>([
-  { id: 1, firstName: 'Jean', lastName: 'Dupont', upVotes: 3, downVotes: 1 },
-  { id: 2, firstName: 'Marie', lastName: 'Durand', upVotes: 5, downVotes: 2 },
-  { id: 3, firstName: 'Pierre', lastName: 'Martin', upVotes: 8, downVotes: 1 },
-  { id: 4, firstName: 'Sophie', lastName: 'Bernard', upVotes: 2, downVotes: 3 },
-  { id: 5, firstName: 'Luc', lastName: 'Petit', upVotes: 4, downVotes: 0 },
-])
+const teacherStore = useTeacherStore()
+
+onMounted(() => {
+  teacherStore.fetchTeachers()
+})
 
 const sortedProfessors = computed(() => {
-  return [...professors.value]
+  return [...teacherStore.filteredTeachers]
+    .map(teacher => ({
+      ...teacher,
+      upVotes: teacher.upVotes ?? 0,
+      downVotes: teacher.downVotes ?? 0,
+    }))
     .sort((a, b) => (b.upVotes - b.downVotes) - (a.upVotes - a.downVotes))
     .map((prof, index) => ({ ...prof, rank: index + 1 }))
 })
 
 function rowClassName(row: Professor & { rank: number }) {
-  if (row.rank === 1) return 'bg-yellow-100'
-  if (row.rank === 2) return 'bg-gray-100'
-  if (row.rank === 3) return 'bg-orange-100'
+  if (row.rank === 1) return 'bg-gold-dark'
+  if (row.rank === 2) return 'bg-silver-dark'
+  if (row.rank === 3) return 'bg-bronze-dark'
   return ''
 }
 
-function upvote(prof: Professor) {
-  const found = professors.value.find(p => p.id === prof.id)
-  if (found) found.upVotes++
+async function upvote(prof: Professor) {
+  const userId = Number(localStorage.getItem('userId'))
+  if (userId) {
+    await teacherStore.vote(prof.id, 'upvote', userId)
+    await teacherStore.fetchTeachers()
+  }
 }
 
-function downvote(prof: Professor) {
-  const found = professors.value.find(p => p.id === prof.id)
-  if (found) found.downVotes++
+async function downvote(prof: Professor) {
+  const userId = Number(localStorage.getItem('userId'))
+  if (userId) {
+    await teacherStore.vote(prof.id, 'downvote', userId)
+    await teacherStore.fetchTeachers()
+  }
 }
 
 const columns: DataTableColumns<Professor & { rank: number }> = [
@@ -119,22 +134,35 @@ const columns: DataTableColumns<Professor & { rank: number }> = [
 </script>
 
 <style scoped>
-:deep(.bg-yellow-100 td) {
-  background-color: rgb(254 249 195) !important;
+.teacher-table-container {
+  scrollbar-width: thin;
+  scrollbar-color: #525252 #262626;
 }
-:deep(.bg-gray-100 td) {
-  background-color: rgb(243 244 246) !important;
+
+.teacher-table-container::-webkit-scrollbar {
+  width: 8px;
 }
-:deep(.bg-orange-100 td) {
-  background-color: rgb(255 237 213) !important;
+
+.teacher-table-container::-webkit-scrollbar-track {
+  background: #262626;
+  border-radius: 4px;
 }
+
+.teacher-table-container::-webkit-scrollbar-thumb {
+  background: #525252;
+  border-radius: 4px;
+}
+
+.teacher-table-container::-webkit-scrollbar-thumb:hover {
+  background: #737373;
+}
+
 :deep(.n-data-table-table) {
   border-collapse: separate !important;
   border-spacing: 0 12px;
 }
 
 :deep(.n-data-table-table tr) {
-  background-color: white; 
   border-radius: 8px;
 }
 
