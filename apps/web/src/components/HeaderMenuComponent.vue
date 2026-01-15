@@ -10,10 +10,10 @@ const router = useRouter()
 
 const menuOptions = computed(() => [
   {
-    label: 'DeckBuilder',
-    key: 'deck-builder',
+    label: 'Accueil',
+    key: 'teachers',
     onClick: () => {
-      router.push('/deck-builder')
+      router.push('/teachers')
     },
   },
   {

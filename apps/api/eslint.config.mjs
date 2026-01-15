@@ -9,6 +9,13 @@ export default [
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
   {
+    languageOptions: {
+      parserOptions: {
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+  },
+  {
     rules: {
       "no-debugger": "error",
       "@typescript-eslint/no-explicit-any": "off",
