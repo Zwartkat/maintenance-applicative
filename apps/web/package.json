@@ -17,6 +17,8 @@
     "format": "prettier --write --experimental-cli src/"
   },
   "dependencies": {
+    "@tsparticles/slim": "^3.9.1",
+    "@tsparticles/vue3": "^3.0.1",
     "@vicons/ionicons5": "^0.13.0",
     "axios": "^1.13.2",
     "naive-ui": "^2.43.2",

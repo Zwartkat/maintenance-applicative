@@ -2,48 +2,37 @@ import prisma from "../client";
 import { NextFunction, Request, Response } from "express";
 
 export const getTeachers = async (_req: Request, res: Response) => {
-  const professors = await prisma.professor.findMany();
-  const votes = await prisma.vote.groupBy({
-  by: ["professorId", "state"],
-  _count: { state: true },
-});
+  const professors = await prisma.professor.findMany({ include : {vote : true}});
 
-// Map votes by professor
-const result = professors.map((prof) => {
-  const profVotes = votes.filter((v) => v.professorId === prof.id);
-  const upVotes = profVotes.find((v) => v.state === true)?._count.state ?? 0;
-  const downVotes = profVotes.find((v) => v.state === false)?._count.state ?? 0;
+  if (professors.length === 0)
+    res
+      .status(204)
+      .send({ state: 204, message: "No teacher found" });
+  else {
+    // Calculate upVotes and downVotes for each professor
+    const professorsWithVotes = professors.map(professor => {
+      const upVotes = professor.vote.filter(v => v.state === true).length;
+      const downVotes = professor.vote.filter(v => v.state === false).length;
+      return {
+        ...professor,
+        upVotes,
+        downVotes,
+      };
+    });
+    res.status(200).send(professorsWithVotes);
+  }
+};
 
-  return {
-    ...prof,
-    upVotes,
-    downVotes,
-  };
-});
-return res.status(200).json(result);
-}
-
-/**
- *
- * @param req
- * @param res
- * @returns
- */
 export const vote = async (req: Request, res: Response) => {
   const teacherId = Number(req.query.teacher);
   const userId = Number(req.query.user);
-  const vote = req.query.vote === "true";
+  const vote = req.query.vote === 'true';
 
-  // To prevent problems
+  // // To prevent problems
 
-  if (!vote) {
-    return res
-      .status(403)
-      .json({
-        status: 403,
-        message: "Why do you want to downvote a teacher ?",
-      });
-  }
+  // if (!vote){
+  //   return res.status(403).json({status: 403,message: 'Why do you want to downvote a teacher ?'});
+  // }
 
   // Check if user exists
 

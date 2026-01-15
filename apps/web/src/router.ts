@@ -9,7 +9,7 @@ const routes = [
   {
     path: '/teachers',
     component: TeacherTab,
-    meta: { requireAuth: false },
+    meta: { requireAuth: true },
   },
   { path: '/login', component: LoginFormPage },
 ]
