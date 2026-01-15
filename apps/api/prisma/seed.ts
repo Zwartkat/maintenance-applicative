@@ -2,164 +2,53 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-// Définition des personnages avec leurs images locales, affiliations et primes
-const MAX_INT = 2147483647; // Valeur max d'un Int en Prisma (SQLite, PostgreSQL, MySQL)
-const BASE_IMAGE_URL = "http://localhost:3000/images/"; // URL publique pour accéder aux images
-
-const charactersData = [
-  {
-    name: "Monkey D. Luffy",
-    affiliation: "Straw Hat Pirates",
-    bounty: Math.min(1500000000, MAX_INT),
-    size: 1.74,
-    age: 19,
-    weight: 64,
-    image: "luffy.png",
-  },
-  {
-    name: "Roronoa Zoro",
-    affiliation: "Straw Hat Pirates",
-    bounty: Math.min(320000000, MAX_INT),
-    size: 1.81,
-    age: 21,
-    weight: 85,
-    image: "zoro.png",
-  },
-  {
-    name: "Nami",
-    affiliation: "Straw Hat Pirates",
-    bounty: Math.min(66000000, MAX_INT),
-    size: 1.7,
-    age: 20,
-    weight: 58,
-    image: "nami.png",
-  },
-  {
-    name: "Usopp",
-    affiliation: "Straw Hat Pirates",
-    bounty: Math.min(200000000, MAX_INT),
-    size: 1.76,
-    age: 19,
-    weight: 65,
-    image: "usopp.png",
-  },
-  {
-    name: "Sanji",
-    affiliation: "Straw Hat Pirates",
-    bounty: Math.min(330000000, MAX_INT),
-    size: 1.8,
-    age: 21,
-    weight: 69,
-    image: "sanji.png",
-  },
-  {
-    name: "Tony Tony Chopper",
-    affiliation: "Straw Hat Pirates",
-    bounty: Math.min(100, MAX_INT),
-    size: 0.9,
-    age: 17,
-    weight: 20,
-    image: "chopper.png",
-  },
-  {
-    name: "Nico Robin",
-    affiliation: "Straw Hat Pirates",
-    bounty: Math.min(130000000, MAX_INT),
-    size: 1.88,
-    age: 30,
-    weight: 62,
-    image: "robin.png",
-  },
-  {
-    name: "Franky",
-    affiliation: "Straw Hat Pirates",
-    bounty: Math.min(94000000, MAX_INT),
-    size: 2.4,
-    age: 36,
-    weight: 300,
-    image: "franky.png",
-  },
-  {
-    name: "Brook",
-    affiliation: "Straw Hat Pirates",
-    bounty: Math.min(83000000, MAX_INT),
-    size: 2.77,
-    age: 90,
-    weight: 0,
-    image: "brook.png",
-  },
-  {
-    name: "Jinbe",
-    affiliation: "Straw Hat Pirates",
-    bounty: Math.min(438000000, MAX_INT),
-    size: 3.01,
-    age: 46,
-    weight: 275,
-    image: "jinbe.png",
-  },
-  {
-    name: "Boa Hancock",
-    affiliation: "Kuja Pirates",
-    bounty: Math.min(800000000, MAX_INT),
-    size: 1.91,
-    age: 31,
-    weight: 61,
-    image: "boa_hancock.png",
-  },
-  {
-    name: "Shanks",
-    affiliation: "Red Hair Pirates",
-    bounty: Math.min(4048900000, MAX_INT),
-    size: 1.99,
-    age: 39,
-    weight: 82,
-    image: "shanks.png",
-  },
+const professorsData = [
+  { firstName: "Rémi", lastName: "Cozot", email: "remi.cozot@univ-littoral.fr", officeNumber: 123 },
+  { firstName: "Rémi", lastName: "Synave", email: "remi.synave@univ-littoral.fr", officeNumber: 123 },
+  { firstName: "Séverine", lastName: "Letrez", email: "severine.letrez@univ-littoral.fr", officeNumber: 130 },
+  { firstName: "Samuel", lastName: "Delepoulle", email: "samuel.delepoulle@univ-littoral.fr", officeNumber: 130 },
+  { firstName: "François", lastName: "Rousselle", email: "francois.rousselle@univ-littoral.fr", officeNumber: 130 },
+  { firstName: "Floriane", lastName: "Bouifer", email: "iutinfo@univ-littoral.fr", officeNumber: 124 },
+  { firstName: "Amani", lastName: "Braham", email: "amani.braham@univ-littoral.fr", officeNumber: 120 },
+  { firstName: "Dany", lastName: "Capitaine", email: "dany.capitaine@univ-littoral.fr", officeNumber: 130 },
+  { firstName: "Lionnel", lastName: "Conoir", email: "lionnel.conoir@univ-littoral.fr", officeNumber: 120 },
+  { firstName: "Isabelle", lastName: "Delignières", email: "isabelle.hannequin@univ-littoral.fr", officeNumber: 120 },
+  { firstName: "Kevin", lastName: "Guerrier", email: "kevin.guerrier@univ-littoral.fr", officeNumber: 130 },
+  { firstName: "Marguerite", lastName: "Fernandez", email: "marguerite.fernandez@univ-littoral.fr", officeNumber: 120 },
+  { firstName: "Insaf", lastName: "Kerkeni", email: "insaf.kerkeni@univ-littoral.fr", officeNumber: 120 },
+  { firstName: "Anne", lastName: "Pacou", email: "anne.pacou@univ-littoral.fr", officeNumber: 130 },
+  { firstName: "Pauline", lastName: "Malec", email: "pauline.malec@univ-littoral.fr", officeNumber: 117 },
+  { firstName: "Emanuelle", lastName: "André", email: "emmanuelle.andre@univ-littoral.fr", officeNumber: null },
+  { firstName: "Gauthier", lastName: "Aufort", email: "gauthier.aufort@univ-littoral.fr", officeNumber: null },
+  { firstName: "Dominique", lastName: "Dussart", email: "dominique.dussart@univ-littoral.fr", officeNumber: null },
+  { firstName: "Nicolas", lastName: "Tentillier", email: "nicolas.tentillier@univ-littoral.fr", officeNumber: null },
+  { firstName: "Franck", lastName: "Vandewiele", email: "franck.vandewiele@univ-littoral.fr", officeNumber: null },
+  { firstName: "Florence", lastName: "Delpierre", email: "florence.delpierre@univ-littoral.fr", officeNumber: 39 },
 ];
 
 async function main() {
-  console.log("🧹 Nettoyage de la base de données...");
-  await prisma.character.deleteMany();
-  await prisma.affiliation.deleteMany();
-  await prisma.users.deleteMany();
+  console.log("🧹 Nettoyage de la table Professors...");
+  await prisma.professors.deleteMany();
 
-  console.log("🚀 Création des affiliations...");
-  const affiliations: Record<string, number> = {};
-  for (const character of charactersData) {
-    if (!affiliations[character.affiliation]) {
-      const affiliation = await prisma.affiliation.create({
-        data: { name: character.affiliation },
-      });
-      affiliations[character.affiliation] = affiliation.id;
-    }
-  }
-
-  console.log("✨ Ajout des personnages...");
-  for (const character of charactersData) {
-    await prisma.character.create({
+  console.log("👩‍🏫 Ajout des professeurs...");
+  const createdProfessors = new Set<string>();
+  for (const prof of professorsData) {
+    if (createdProfessors.has(prof.email)) continue;
+    await prisma.professors.create({
       data: {
-        name: character.name,
-        affiliationId: affiliations[character.affiliation],
-        lifePoints: character.bounty,
-        size: character.size,
-        age: character.age,
-        weight: character.weight,
-        imageUrl: `${BASE_IMAGE_URL}${character.image}`,
+        firstName: prof.firstName,
+        lastName: prof.lastName,
+        email: prof.email,
+        upVotes: 0,
+        downVotes: 0,
+        officeNumber: prof.officeNumber ?? undefined,
       },
     });
-    console.log(`✅ Ajouté : ${character.name}`);
+    createdProfessors.add(prof.email);
+    console.log(`✅ Ajouté professeur : ${prof.firstName} ${prof.lastName}`);
   }
 
-  console.log("👤 Ajout de l'utilisateur admin...");
-  await prisma.users.create({
-    data: {
-      email: "admin@gmail.com",
-      password: "admin",
-    },
-  });
-  console.log("✅ Utilisateur admin ajouté avec succès !");
-
-  console.log("🎉 Personnages et utilisateur admin ajoutés avec succès !");
+  console.log("🎉 Professors initialisés !");
 }
 
 main()
