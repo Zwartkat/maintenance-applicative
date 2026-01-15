@@ -17,8 +17,7 @@ export const login = async (
       return;
     }
 
-    const valid = await bcrypt.compare(password, user.password);
-    if (!valid) {
+    if (password == user.password) {
       res.status(400).send({ error: "Invalid identifiers" });
       return;
     }
@@ -103,8 +102,7 @@ export const updateUser = async (
     }
 
     if (password !== undefined) {
-      const hashedPassword = await bcrypt.hash(password, 10);
-      updatedData.password = hashedPassword;
+      updatedData.password = password;
     }
 
     if (_.isEmpty(updatedData)) {

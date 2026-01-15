@@ -136,3 +136,28 @@ export const unvote = async (req: Request, res: Response) => {
     });
   }
 };
+
+
+export const getVoteById = async (req : Request, res : Response) => {
+  const userId = Number(req.params.userId)
+
+  // Check if provided user exists
+  if (
+    isNaN(userId) ||
+    (await prisma.user.findUnique({ where: { id: userId } })) === null
+  ) {
+    return res.status(400).json({ status: 400, message: "Unknown user" });
+  }
+
+  try {
+    
+    const votes = await prisma.vote.findMany({where: {userId : userId}, select: {state: true, professorId: true, userId: false}})
+    if (votes.length === 0){
+      return res.status(202).json({status: 202})
+    }
+  return res.status(200).json(votes)
+  } catch (err){
+    return res.status(500).json({status: 500, message : "An internal error occured"})
+  }
+
+}
