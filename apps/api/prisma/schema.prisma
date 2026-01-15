@@ -7,36 +7,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Character {
-  id          Int       @id @default(autoincrement())
-  name        String    @unique
-  affiliation  Affiliation @relation(fields: [affiliationId], references: [id])
-  affiliationId Int
-  lifePoints  Int?
-  size        Float?
-  age         Int?
-  weight      Float?
-  imageUrl    String?
-  decks        Deck[]       @relation("DeckCharacters")
-}
-
-model Affiliation {
-  id         Int         @id @default(autoincrement())
-  name       String      @unique 
-  characters Character[]
-}
-
 model Users {
   id       Int       @id @default(autoincrement())
   email String       @unique
   password String
-  decks    Deck[]    @relation("UserDecks")
 }
 
-model Deck {
-  id          Int         @id @default(autoincrement())
-  name        String
-  owner       Users       @relation("UserDecks", fields: [ownerId], references: [id])
-  ownerId     Int
-  characters  Character[] @relation("DeckCharacters")
+model Professors {
+  id           Int     @id @default(autoincrement())
+  firstName    String
+  lastName     String
+  email        String  @unique
+  upVotes      Int     @default(0)
+  downVotes    Int     @default(0)
+  officeNumber Int?
 }
