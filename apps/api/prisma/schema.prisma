@@ -26,17 +26,11 @@ model Professor {
 }
 
 model Vote {
-  id          Int       @id @default(autoincrement())
-  type        VoteType
+  state       Boolean @default(false)
   user        User      @relation(fields: [userId], references: [id])
   userId      Int
   professor   Professor @relation(fields: [professorId], references: [id])
   professorId Int
 
   @@unique([userId, professorId])
-}
-
-enum VoteType {
-  UPVOTE
-  DOWNVOTE
 }

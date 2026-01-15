@@ -2,36 +2,42 @@ import prisma from "../client";
 import { NextFunction, Request, Response } from "express";
 
 export const getTeachers = async (_req: Request, res: Response) => {
-  const professors = await prisma.professor.findMany();
+  const professors = await prisma.professor.findMany({ include : {vote : true}});
 
   if (professors.length === 0)
     res
       .status(204)
-      .send({ state: "success", statusCode: 204, message: "No decks found" });
+      .send({ state: 204, message: "No teacher found" });
   else res.status(200).send(professors);
 };
 
 export const vote = async (req: Request, res: Response) => {
-  const teacherId = Number(req.params.teacherId);
-  const userId = Number(req.params.userId);
-  const voteType = req.params.voteType;
+  const teacherId = Number(req.query.teacher);
+  const userId = Number(req.query.user);
+  const vote = Boolean(req.query.vote);
 
-  if (voteType != "upvote" && voteType != "downvote") {
-    return res.status(400).json({"status": 400,"message": 'Vote type is not "upvote" or "downvote"'});
+  // To prevent problems
+
+  if (!vote){
+    return res.status(403).json({status: 403,message: 'Why do you want to downvote a teacher ?'});
   }
+
+  // Check if user exists
 
   if (
     isNaN(userId) ||
     await prisma.user.findUnique({ where: { id: userId } }) === null
   ) {
-    return res.status(400).json({"status": 400, "message" : "Unknown user"});
+    return res.status(400).json({status: 400, message : "Unknown user"});
   }
+
+  // Check if teacher exists
 
   if (
     isNaN(teacherId) ||
     await prisma.professor.findUnique({ where: { id: teacherId } }) === null
   ) {
-    return res.status(400).json({"status": 400, "message": "Unknown teacher"});
+    return res.status(400).json({status: 400, message: "Unknown teacher"});
   }
 
   // Add a new row if there is no row with provided user id and teacher id else row is updated with new vote
@@ -44,17 +50,69 @@ export const vote = async (req: Request, res: Response) => {
       },
     },
     update: {
-      type: voteType === "upvote" ? "UPVOTE" : "DOWNVOTE",
+      state: vote,
     },
     create: {
       userId: userId,
       professorId: teacherId,
-      type: voteType === "upvote" ? "UPVOTE" : "DOWNVOTE",
+      state: vote,
     },
   });
-  return res.status(201).json({"status": 201})
+  return res.status(201).json({status: 201, message: "Successfully updated"})
 }
   catch (err){
-    return res.status(500).json({"status": 500, "message" : "An error occured while trying to create or update with this parameter"})
+    return res.status(500).json({status: 500, message : "An error occured while trying to create or update with this parameter"})
   }
+};
+
+
+/**
+ * Remove a vote
+ */
+export const unvote = async (req: Request, res: Response) => {
+  const teacherId = Number(req.query.teacher);
+  const userId = Number(req.query.user);
+  
+  // Check if provided user exists
+  if (
+    isNaN(userId) ||
+    await prisma.user.findUnique({ where: { id: userId } }) === null
+  ) {
+    return res.status(400).json({status: 400, message : "Unknown user"});
+  }
+
+  // Check if provided teacher exists
+  if (
+    isNaN(teacherId) ||
+      await prisma.professor.findUnique({ where: { id: teacherId } }) === null
+  ) {
+    return res.status(400).json({status: 400, message: "Unknown teacher"});
+  }
+
+  // Delete vote if exists
+  try {
+  await prisma.vote.delete({
+    where: {
+      userId_professorId: {
+        userId: userId,
+        professorId: teacherId,
+      },
+    },
+  });
+
+  return res.status(201).json({ status: 201, message: "Successfully delete" });
+} catch (err: any) {
+  // Catch not found exception
+  if (err.code === "P2025") {
+    return res.status(404).json({
+      status: 404,
+      message: "No vote found",
+    });
+  }
+
+  return res.status(500).json({
+    status: 500,
+    message: "An error occurred while trying to delete with this parameter",
+  });
+}
 };
