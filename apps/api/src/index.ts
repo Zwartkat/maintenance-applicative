@@ -4,6 +4,7 @@ import YAML from "yamljs";
 import { usersRouter } from "./users/users.route";
 import path from "path";
 import cors from "cors";
+import { teacherRouter } from "./teachers/teachers.route";
 
 console.log(__dirname);
 
@@ -22,6 +23,7 @@ app.use(
   }),
 );
 
+app.use(teacherRouter)
 app.use("/users", usersRouter);
 
 export const server = app.listen(port);

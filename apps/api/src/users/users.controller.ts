@@ -11,7 +11,7 @@ export const login = async (
 ): Promise<void> => {
   try {
     const { email, password } = req.body;
-    const user = await prisma.users.findUnique({ where: { email: email } });
+    const user = await prisma.user.findUnique({ where: { email: email } });
     if (!user) {
       res.status(201).send({ error: "Invalid identifiers" });
       return;
@@ -51,7 +51,7 @@ export const register = async (
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const emailExisted = await prisma.users.findUnique({
+    const emailExisted = await prisma.user.findUnique({
       where: { email: email },
     });
 
@@ -60,7 +60,7 @@ export const register = async (
       return;
     }
 
-    await prisma.users.createMany({
+    await prisma.user.createMany({
       data: [
         {
           email: email,
@@ -87,7 +87,7 @@ export const updateUser = async (
       return;
     }
 
-    const user = await prisma.users.findUnique({ where: { id: id } });
+    const user = await prisma.user.findUnique({ where: { id: id } });
 
     if (!user) {
       res.status(404).send({ error: "User not found" });
@@ -112,7 +112,7 @@ export const updateUser = async (
       return;
     }
 
-    const userUpdated = await prisma.users.update({
+    const userUpdated = await prisma.user.update({
       where: { id: id },
       data: updatedData,
     });
@@ -135,14 +135,14 @@ export const deleteUser = async (
       return;
     }
 
-    const user = await prisma.users.findUnique({ where: { id: id } });
+    const user = await prisma.user.findUnique({ where: { id: id } });
 
     if (!user) {
       res.status(404).send({ error: "User not found" });
       return;
     }
 
-    const deletedUser = await prisma.users.delete({ where: { id: id } });
+    const deletedUser = await prisma.user.delete({ where: { id: id } });
 
     res.status(200).send(deletedUser);
   } catch {
@@ -162,7 +162,7 @@ export const getUserById = async (
       return;
     }
 
-    const user = await prisma.users.findUnique({
+    const user = await prisma.user.findUnique({
       where: { id: id },
       select: {
         id: true,

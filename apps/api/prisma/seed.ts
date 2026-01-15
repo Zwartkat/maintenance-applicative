@@ -28,19 +28,20 @@ const professorsData = [
 
 async function main() {
   console.log("🧹 Nettoyage de la table Professors...");
-  await prisma.professors.deleteMany();
+  await prisma.professor.deleteMany();
+  await prisma.user.deleteMany();
+
+  await prisma.user.create({data: {email: "admin@gmail.com",password: "admin"}})
 
   console.log("👩‍🏫 Ajout des professeurs...");
   const createdProfessors = new Set<string>();
   for (const prof of professorsData) {
     if (createdProfessors.has(prof.email)) continue;
-    await prisma.professors.create({
+    await prisma.professor.create({
       data: {
         firstName: prof.firstName,
         lastName: prof.lastName,
         email: prof.email,
-        upVotes: 0,
-        downVotes: 0,
         officeNumber: prof.officeNumber ?? undefined,
       },
     });
