@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import { NConfigProvider } from 'naive-ui'
+import { NConfigProvider, darkTheme } from 'naive-ui'
 import HeaderMenu from './components/HeaderMenuComponent.vue'
 </script>
 
 <template>
-  <n-config-provider>
+  <n-config-provider :theme="darkTheme">
     <n-notification-provider>
       <n-layout>
         <n-layout-header>

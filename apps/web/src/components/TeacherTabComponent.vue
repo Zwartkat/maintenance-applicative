@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-4xl mx-auto mt-6 p-4 max-h-[400px] overflow-y-auto">
+  <div class="max-w-4xl mx-auto mt-6 p-4 max-h-[400px] overflow-y-auto teacher-table-container">
     <n-spin :show="teacherStore.isLoading">
       <n-data-table
         :columns="columns"
@@ -22,7 +22,6 @@ import { NDataTable, NButton, NSpace, NTag, NSpin, NAlert } from 'naive-ui'
 import { ArrowUpOutline, ArrowDownOutline } from '@vicons/ionicons5'
 import type { DataTableColumns } from 'naive-ui'
 import { useTeacherStore } from '../stores/teacherStore'
-import type { Teacher } from '../types/teacherTypes'
 
 interface Professor {
   id: number
@@ -50,9 +49,9 @@ const sortedProfessors = computed(() => {
 })
 
 function rowClassName(row: Professor & { rank: number }) {
-  if (row.rank === 1) return 'bg-yellow-100'
-  if (row.rank === 2) return 'bg-gray-100'
-  if (row.rank === 3) return 'bg-orange-100'
+  if (row.rank === 1) return 'bg-gold-dark'
+  if (row.rank === 2) return 'bg-silver-dark'
+  if (row.rank === 3) return 'bg-bronze-dark'
   return ''
 }
 
@@ -135,22 +134,35 @@ const columns: DataTableColumns<Professor & { rank: number }> = [
 </script>
 
 <style scoped>
-:deep(.bg-yellow-100 td) {
-  background-color: rgb(254 249 195) !important;
+.teacher-table-container {
+  scrollbar-width: thin;
+  scrollbar-color: #525252 #262626;
 }
-:deep(.bg-gray-100 td) {
-  background-color: rgb(243 244 246) !important;
+
+.teacher-table-container::-webkit-scrollbar {
+  width: 8px;
 }
-:deep(.bg-orange-100 td) {
-  background-color: rgb(255 237 213) !important;
+
+.teacher-table-container::-webkit-scrollbar-track {
+  background: #262626;
+  border-radius: 4px;
 }
+
+.teacher-table-container::-webkit-scrollbar-thumb {
+  background: #525252;
+  border-radius: 4px;
+}
+
+.teacher-table-container::-webkit-scrollbar-thumb:hover {
+  background: #737373;
+}
+
 :deep(.n-data-table-table) {
   border-collapse: separate !important;
   border-spacing: 0 12px;
 }
 
 :deep(.n-data-table-table tr) {
-  background-color: white; 
   border-radius: 8px;
 }
 
