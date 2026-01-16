@@ -15,7 +15,6 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 
 const router = useRouter()

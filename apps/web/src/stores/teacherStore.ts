@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import type { Teacher, VoteType } from '../types/teacherTypes'
+import type { Teacher } from '../types/teacherTypes'
 import { getTeachers, voteForTeacher } from '../apis/teacherApi'
 
 // Fonction pour normaliser le texte (enlever les accents)

@@ -85,10 +85,6 @@ const unvotedProfessors = computed(() => {
     .map((prof, index) => ({ ...prof, rank: votedProfessors.value.length + index + 1 }))
 })
 
-const sortedProfessors = computed(() => {
-  return [...votedProfessors.value, ...unvotedProfessors.value]
-})
-
 function rowClassName(row: Professor & { rank: number }) {
   if (row.rank === 1) return 'bg-gold-dark'
   if (row.rank === 2) return 'bg-silver-dark'
