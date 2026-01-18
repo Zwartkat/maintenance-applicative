@@ -26,9 +26,11 @@ export const getTeachers = async (): Promise<Teacher[]> => {
 export const voteForTeacher = async (
   teacherId: number,
   voteType: boolean,
-  userId: number
+  userId: number,
 ): Promise<{ status: number }> => {
-  const response = await api.post(`/vote?teacher=${teacherId}&vote=${voteType ? 'true' : 'false'}&user=${userId}`)
+  const response = await api.post(
+    `/vote?teacher=${teacherId}&vote=${voteType ? 'true' : 'false'}&user=${userId}`,
+  )
   console.log(response)
   return response.data
 }

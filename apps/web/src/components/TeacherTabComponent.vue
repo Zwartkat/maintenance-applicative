@@ -40,7 +40,7 @@
 
 <script setup lang="ts">
 import { computed, h, onMounted } from 'vue'
-import { NDataTable, NButton, NSpace, NTag, NSpin, NAlert } from 'naive-ui'
+import { NDataTable, NButton, NSpace, NTag, NSpin, NAlert, useNotification } from 'naive-ui'
 import { ArrowUpOutline, ArrowDownOutline } from '@vicons/ionicons5'
 import type { DataTableColumns } from 'naive-ui'
 import { useTeacherStore } from '../stores/teacherStore'
@@ -54,6 +54,7 @@ interface Professor {
 }
 
 const teacherStore = useTeacherStore()
+const notification = useNotification();
 
 onMounted(() => {
   teacherStore.fetchTeachers()
@@ -108,7 +109,8 @@ async function upvote(prof: Professor) {
 async function downvote(prof: Professor) {
   const userId = Number(localStorage.getItem('user'))
   if (userId) {
-    await teacherStore.vote(prof.id, false, userId)
+    notification.error({content: "Vous n'êtes pas autorisé à downvote un professeur"})
+    //await teacherStore.vote(prof.id, true, userId)
     await teacherStore.fetchTeachers()
   }
 }

@@ -5,7 +5,7 @@ import HomeView from './views/HomeView.vue'
 import TeacherTab from './pages/TeacherPage.vue'
 
 const routes = [
-  { path: '/', component: HomeView, meta: {requireAuth : true} },
+  { path: '/', component: HomeView, meta: { requireAuth: true } },
   {
     path: '/teachers',
     component: TeacherTab,

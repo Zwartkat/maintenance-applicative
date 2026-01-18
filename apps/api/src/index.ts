@@ -23,7 +23,7 @@ app.use(
   }),
 );
 
-app.use(teacherRouter)
+app.use(teacherRouter);
 app.use("/users", usersRouter);
 
 export const server = app.listen(port);

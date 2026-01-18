@@ -7,4 +7,3 @@ export interface Teacher {
   upVotes?: number
   downVotes?: number
 }
-

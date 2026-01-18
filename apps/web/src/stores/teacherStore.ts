@@ -34,9 +34,7 @@ export const useTeacherStore = defineStore('teacherStore', () => {
       const reversedFullName = `${normalizedLastName} ${normalizedFirstName}`
 
       // Vérifie si tous les termes de recherche correspondent
-      return queryTerms.every((term) => 
-        fullName.includes(term) || reversedFullName.includes(term)
-      )
+      return queryTerms.every((term) => fullName.includes(term) || reversedFullName.includes(term))
     })
   })
 
