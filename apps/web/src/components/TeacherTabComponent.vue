@@ -86,11 +86,6 @@ const unvotedProfessors = computed(() => {
     .map((prof, index) => ({ ...prof, rank: votedProfessors.value.length + index + 1 }))
 })
 
-// Garde l'ancien computed pour compatibilité
-const sortedProfessors = computed(() => {
-  return [...votedProfessors.value, ...unvotedProfessors.value]
-})
-
 function rowClassName(row: Professor & { rank: number }) {
   if (row.rank === 1) return 'bg-gold-dark'
   if (row.rank === 2) return 'bg-silver-dark'
@@ -180,49 +175,87 @@ const columns: DataTableColumns<Professor & { rank: number }> = [
 <style scoped>
 .teacher-table-container {
   scrollbar-width: thin;
-  scrollbar-color: #525252 #262626;
+  scrollbar-color: rgba(34, 197, 94, 0.3) rgba(0, 0, 0, 0.2);
 }
 
 .teacher-table-container::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 .teacher-table-container::-webkit-scrollbar-track {
-  background: #262626;
-  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
 }
 
 .teacher-table-container::-webkit-scrollbar-thumb {
-  background: #525252;
-  border-radius: 4px;
+  background: linear-gradient(180deg, rgba(34, 197, 94, 0.4) 0%, rgba(34, 197, 94, 0.2) 100%);
+  border-radius: 8px;
+  border: 1px solid rgba(34, 197, 94, 0.1);
 }
 
 .teacher-table-container::-webkit-scrollbar-thumb:hover {
-  background: #737373;
+  background: linear-gradient(180deg, rgba(34, 197, 94, 0.6) 0%, rgba(34, 197, 94, 0.3) 100%);
 }
 
 :deep(.n-data-table-table) {
   border-collapse: separate !important;
-  border-spacing: 0 12px;
+  border-spacing: 0 8px;
 }
 
 :deep(.n-data-table-table tr) {
-  border-radius: 8px;
+  border-radius: 12px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(10, 10, 10, 0.4) 100%);
+  border: 1px solid rgba(34, 197, 94, 0.05);
+  backdrop-filter: blur(10px);
 }
 
 :deep(.n-data-table-table tbody tr:hover) {
-  transform: scale(1.02) translateX(5px);
-  box-shadow: 0 8px 25px rgba(66, 184, 131, 0.2);
-  background-color: rgba(66, 184, 131, 0.08) !important;
+  transform: scale(1.01) translateX(3px);
+  box-shadow: 
+    0 8px 25px rgba(34, 197, 94, 0.15),
+    inset 0 1px 0 rgba(34, 197, 94, 0.1);
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.08) 0%, rgba(34, 197, 94, 0.04) 100%) !important;
+  border-color: rgba(34, 197, 94, 0.2);
 }
 
 :deep(.n-data-table-table tbody tr:hover td) {
-  background-color: rgba(66, 184, 131, 0.08) !important;
+  background: transparent !important;
+}
+
+:deep(.n-data-table-table td) {
+  background: transparent !important;
+  color: rgba(255, 255, 255, 0.9);
+  padding: 12px 16px;
 }
 
 :deep(.n-data-table-table thead) {
   display: none;
+}
+
+/* Couleurs spéciales pour le podium */
+:deep(.bg-gold-dark) {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 193, 7, 0.08) 100%) !important;
+  border-color: rgba(255, 215, 0, 0.3) !important;
+  box-shadow: 0 4px 20px rgba(255, 215, 0, 0.1);
+}
+
+:deep(.bg-silver-dark) {
+  background: linear-gradient(135deg, rgba(192, 192, 192, 0.15) 0%, rgba(169, 169, 169, 0.08) 100%) !important;
+  border-color: rgba(192, 192, 192, 0.3) !important;
+  box-shadow: 0 4px 20px rgba(192, 192, 192, 0.1);
+}
+
+:deep(.bg-bronze-dark) {
+  background: linear-gradient(135deg, rgba(205, 127, 50, 0.15) 0%, rgba(184, 115, 51, 0.08) 100%) !important;
+  border-color: rgba(205, 127, 50, 0.3) !important;
+  box-shadow: 0 4px 20px rgba(205, 127, 50, 0.1);
+}
+
+:deep(.unvoted-row) {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0.01) 100%) !important;
+  border-color: rgba(255, 255, 255, 0.05) !important;
+  opacity: 0.7;
 }
 
 /* Animation pour le changement de rang */
@@ -243,36 +276,36 @@ const columns: DataTableColumns<Professor & { rank: number }> = [
 
 /* Effet de montée/descente */
 :deep(.rank-up) {
-  animation: rankUp 0.5s ease-out;
+  animation: rankUp 0.6s ease-out;
 }
 
 :deep(.rank-down) {
-  animation: rankDown 0.5s ease-out;
+  animation: rankDown 0.6s ease-out;
 }
 
 @keyframes rankUp {
   0% {
-    background-color: rgba(34, 197, 94, 0.3) !important;
-    transform: translateY(20px);
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.3) 0%, rgba(34, 197, 94, 0.15) 100%) !important;
+    transform: translateY(15px);
+    box-shadow: 0 8px 30px rgba(34, 197, 94, 0.3);
   }
   100% {
-    background-color: transparent;
     transform: translateY(0);
   }
 }
 
 @keyframes rankDown {
   0% {
-    background-color: rgba(239, 68, 68, 0.3) !important;
-    transform: translateY(-20px);
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(220, 38, 38, 0.1) 100%) !important;
+    transform: translateY(-15px);
+    box-shadow: 0 8px 30px rgba(239, 68, 68, 0.2);
   }
   100% {
-    background-color: transparent;
     transform: translateY(0);
   }
 }
 
 .separator-section {
-  margin: 0.5rem 0;
+  margin: 1rem 0;
 }
 </style>
