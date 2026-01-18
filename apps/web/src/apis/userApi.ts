@@ -11,7 +11,6 @@ export const postUser = async (userPayload: IUserPayload) => {
 
 export const loginUser = async (userPayload: IUserPayload) => {
   const response = await api.post('/users/login', userPayload)
-  console.log(JSON.stringify(response))
   return {
     userData: response.data,
     status: response.status,

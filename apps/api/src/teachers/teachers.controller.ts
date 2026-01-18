@@ -26,12 +26,17 @@ export const getTeachers = async (_req: Request, res: Response) => {
 export const vote = async (req: Request, res: Response) => {
   const teacherId = Number(req.query.teacher);
   const userId = Number(req.query.user);
-  const vote = req.query.vote === "true";
+  const vote = Boolean(req.query.vote);
 
   // // To prevent problems
 
-  if (!vote){
-    return res.status(403).json({status: 403,message: 'Why do you want to downvote a teacher ?'});
+  if (!vote) {
+    return res
+      .status(403)
+      .json({
+        status: 403,
+        message: "Why do you want to downvote a teacher ?",
+      });
   }
   // Check if user exists
 
@@ -82,7 +87,7 @@ export const vote = async (req: Request, res: Response) => {
 };
 
 /**
- * Remove a vote. 
+ * Remove a vote.
  * Require teacher id to unvote and user id who vote
  */
 export const unvote = async (req: Request, res: Response) => {

@@ -1,13 +1,17 @@
 # Teacher Rating Platform
 
 Plateforme permettant aux utilisateurs de consulter des professeurs et de voter
-(upvote / downvote) via une API REST.
+(upvote / downvote) via une API REST. 
+
+Ce projet s’appuie sur une idée volontairement décalée. Il ne doit pas être utilisé pour évaluer ou cibler des personnes réelles et ne comporte aucune intention négative.
+Le vote négatif est désactivé. Le bouton est affiché pour des raisons graphiques mais ne peut pas être utilisé. 
 
 ---
 
 ## Description
 
 Ce projet est un **monorepo Turborepo** contenant :
+
 - une API REST (Node.js / Express / Prisma)
 - une application frontend (React / Next.js)
 
@@ -26,16 +30,19 @@ Monorepo géré avec **Turborepo** :
 ## Stack technique
 
 ### Frontend
+
 - Vuejs
 - TypeScript
 - Axios
 
 ### Backend
+
 - Node.js
 - Express
 - Prisma ORM
 
 ### Outils
+
 - Turborepo
 - pnpm
 - ESLint
@@ -71,6 +78,7 @@ npm run lint
 ## Configuration
 
 Créer un fichier .env dans apps/api :
+
 ```md
 DATABASE_URL=file:./dev.db
 JWT_SECRET=secret
@@ -78,6 +86,7 @@ JWT_EXPIRES_IN=1d
 ```
 
 Créer un fichier .env dans apps/web
+
 ```md
 VITE_API_URL = "http://localhost:3000"
 ```
@@ -93,6 +102,7 @@ Frontend : http://localhost:5173
 API : http://localhost:3000
 
 ## Structure des dossiers
+
 ```
 apps/web/
 apps/api/
@@ -100,10 +110,9 @@ packages/
 turbo.json
 ```
 
-
 ## API
 
-Swagger :  http://localhost:3000/api-docs/
+Swagger : http://localhost:3000/api-docs/
 
 ## Base de données
 
