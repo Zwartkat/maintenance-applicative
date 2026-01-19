@@ -1,10 +1,7 @@
 # Teacher Rating Platform
 
-Plateforme permettant aux utilisateurs de consulter des professeurs et de voter
+Plateforme permettant aux utilisateurs de consulter des professeurs d'animés et de voter
 (upvote / downvote) via une API REST. 
-
-Ce projet s’appuie sur une idée volontairement décalée. Il ne doit pas être utilisé pour évaluer ou cibler des personnes réelles et ne comporte aucune intention négative.
-Le vote négatif est désactivé. Le bouton est affiché pour des raisons graphiques mais ne peut pas être utilisé. 
 
 ---
 
@@ -80,7 +77,7 @@ npm run lint
 Créer un fichier .env dans apps/api :
 
 ```md
-DATABASE_URL=file:./dev.db
+DATABASE_URL="mysql://root:password@127.0.0.1:3306/vote_db"
 JWT_SECRET=secret
 JWT_EXPIRES_IN=1d
 ```

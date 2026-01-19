@@ -4,105 +4,55 @@ const prisma = new PrismaClient();
 
 const professorsData = [
   {
-    firstName: "Remus",
-    lastName: "Corza",
-    officeNumber: 123,
+    "firstName": "Jiraya",
+    "lastName": "Sannin",
+    "officeNumber": 1
   },
   {
-    firstName: "Romulus",
-    lastName: "Solave",
-    officeNumber: 123,
+    "firstName": "Koro",
+    "lastName": "Sensei",
+    "officeNumber": 3
   },
   {
-    firstName: "Christianne",
-    lastName: "Lentre",
-    officeNumber: 130,
+    "firstName": "Satoru",
+    "lastName": "Gojo",
+    "officeNumber": 7
   },
   {
-    firstName: "Emmanuel",
-    lastName: "Vandenpoul",
-    officeNumber: 130,
+    "firstName": "Kakashi",
+    "lastName": "Hatake",
+    "officeNumber": 6
   },
   {
-    firstName: "Francis",
-    lastName: "Costelle",
-    officeNumber: 130,
+    "firstName": "Shota",
+    "lastName": "Aizawa",
+    "officeNumber": 11
   },
   {
-    firstName: "Lauranne",
-    lastName: "Bolter",
-    officeNumber: 124,
+    "firstName": "Genkai",
+    "lastName": "Toguro",
+    "officeNumber": 2
   },
   {
-    firstName: "Amira",
-    lastName: "Bradan",
-    officeNumber: 120,
+    "firstName": "Izumi",
+    "lastName": "Curtis",
+    "officeNumber": 14
   },
   {
-    firstName: "Daniel",
-    lastName: "Chef",
-    officeNumber: 130,
+    "firstName": "All",
+    "lastName": "Might",
+    "officeNumber": 10
   },
   {
-    firstName: "Cristiano",
-    lastName: "Lovoie",
-    officeNumber: 120,
+    "firstName": "Silvers",
+    "lastName": "Rayleigh",
+    "officeNumber": 8
   },
   {
-    firstName: "Estelle",
-    lastName: "Delinguen",
-    officeNumber: 120,
-  },
-  {
-    firstName: "Maxime",
-    lastName: "Gallier",
-    officeNumber: 130,
-  },
-  {
-    firstName: "Rose",
-    lastName: "Rodriguez",
-    officeNumber: 120,
-  },
-  {
-    firstName: "Iman",
-    lastName: "Korneki",
-    officeNumber: 120,
-  },
-  {
-    firstName: "Annie",
-    lastName: "Cadot",
-    officeNumber: 130,
-  },
-  {
-    firstName: "Emeline",
-    lastName: "Molecco",
-    officeNumber: 117,
-  },
-  {
-    firstName: "Gauthier",
-    lastName: "Fortau",
-    officeNumber: null,
-  },
-  {
-    firstName: "Damien",
-    lastName: "Dossar",
-    officeNumber: null,
-  },
-  {
-    firstName: "Nicolas",
-    lastName: "Liert",
-    officeNumber: null,
-  },
-  {
-    firstName: "Francky",
-    lastName: "Wielen",
-    officeNumber: null,
-  },
-  {
-    firstName: "Lorence",
-    lastName: "Delapierre",
-    officeNumber: 39,
-  },
+    "firstName": "Master",
+    "lastName": "Roshi",
+    "officeNumber": 5
+  }
 ];
 
 async function main() {
