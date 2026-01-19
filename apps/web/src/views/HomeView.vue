@@ -25,7 +25,7 @@ onMounted(() => {
         <span class="text-green-400">Teacher</span> Ranking
       </h1>
       <p class="text-xl text-white/60 mb-8 max-w-2xl mx-auto">
-        Votez pour vos professeurs préférés et découvrez le classement en temps réel
+        Votez pour vos professeurs d'animés préférés et découvrez le classement en temps réel
       </p>
       
       <n-button 
@@ -49,7 +49,7 @@ onMounted(() => {
           <n-icon :component="SchoolOutline" size="32" />
         </div>
         <h3 class="text-lg font-semibold text-white mb-2">Tous les profs</h3>
-        <p class="text-white/50 text-sm">Retrouvez tous les professeurs de l'établissement</p>
+        <p class="text-white/50 text-sm">Retrouvez des professeurs d'animés'</p>
       </div>
       
       <div class="feature-card">
@@ -65,7 +65,7 @@ onMounted(() => {
           <n-icon :component="PeopleOutline" size="32" />
         </div>
         <h3 class="text-lg font-semibold text-white mb-2">Votez</h3>
-        <p class="text-white/50 text-sm">Upvote ou downvote vos professeurs</p>
+        <p class="text-white/50 text-sm">Upvote ou downvote vos professeurs préférés</p>
       </div>
     </div>
   </main>
