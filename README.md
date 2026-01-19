@@ -1,3 +1,7 @@
+# Groupe
+- Lorenzo VANDENKOORNHUYSE
+- Adrien MALLEVAEY
+
 # Teacher Rating Platform
 
 Plateforme permettant aux utilisateurs de consulter des professeurs et de voter
@@ -13,7 +17,7 @@ Le vote négatif est désactivé. Le bouton est affiché pour des raisons graphi
 Ce projet est un **monorepo Turborepo** contenant :
 
 - une API REST (Node.js / Express / Prisma)
-- une application frontend (React / Next.js)
+- une application frontend (Vuejs / Vite)
 
 ---
 
