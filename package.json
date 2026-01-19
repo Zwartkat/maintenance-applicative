@@ -9,7 +9,8 @@
     "check-types": "turbo run check-types",
     "test:api": "npm --prefix ./apps/api run test",
     "test:api:coverage": "npm --prefix ./apps/api run test:coverage",
-    "db:studio": "npm --prefix ./apps/api run db:studio"
+    "db:studio": "npm --prefix ./apps/api run db:studio",
+    "db:reset": "npm --prefix ./apps/api run db:reset"
   },
   "devDependencies": {
     "prettier": "^3.7.4",
