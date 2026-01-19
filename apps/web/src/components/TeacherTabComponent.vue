@@ -104,8 +104,7 @@ async function upvote(prof: Professor) {
 async function downvote(prof: Professor) {
   const userId = Number(localStorage.getItem('user'))
   if (userId) {
-    notification.error({content: "Vous n'êtes pas autorisé à downvote un professeur"})
-    //await teacherStore.vote(prof.id, true, userId)
+    await teacherStore.vote(prof.id, false, userId)
     await teacherStore.fetchTeachers()
   }
 }

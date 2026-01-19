@@ -26,18 +26,19 @@ export const getTeachers = async (_req: Request, res: Response) => {
 export const vote = async (req: Request, res: Response) => {
   const teacherId = Number(req.query.teacher);
   const userId = Number(req.query.user);
-  const vote = Boolean(req.query.vote);
+  const vote = req.query.vote === "true";
 
   // // To prevent problems
 
-  if (!vote) {
-    return res
-      .status(403)
-      .json({
-        status: 403,
-        message: "Why do you want to downvote a teacher ?",
-      });
-  }
+  // if (!vote) {
+  //   return res
+  //     .status(403)
+  //     .json({
+  //       status: 403,
+  //       message: "Why do you want to downvote a teacher ?",
+  //     });
+  // }
+  
   // Check if user exists
 
   if (
