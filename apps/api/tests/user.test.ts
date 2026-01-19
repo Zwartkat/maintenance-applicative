@@ -13,8 +13,8 @@ describe("User API", () => {
 
       const token = "mockedToken";
 
-      prismaMock.users.create.mockResolvedValue(mockUser);
-      prismaMock.users.findUnique.mockResolvedValue(mockUser);
+      prismaMock.user.create.mockResolvedValue(mockUser);
+      prismaMock.user.findUnique.mockResolvedValue(mockUser);
 
       const response = await request(app).post("/users/login").send(mockUser);
 
@@ -26,7 +26,7 @@ describe("User API", () => {
     });
 
     it("should return 201 with error if user is not found", async () => {
-      prismaMock.users.findUnique.mockResolvedValue(null);
+      prismaMock.user.findUnique.mockResolvedValue(null);
 
       const response = await request(app)
         .post("/users/login")
@@ -42,7 +42,7 @@ describe("User API", () => {
         email: "test@example.com",
         password: "truePassword",
       };
-      prismaMock.users.findUnique.mockResolvedValue(user);
+      prismaMock.user.findUnique.mockResolvedValue(user);
 
       const response = await request(app)
         .post("/users/login")
@@ -58,7 +58,7 @@ describe("User API", () => {
         password: "truePassword",
       };
 
-      prismaMock.users.findUnique.mockRejectedValue(
+      prismaMock.user.findUnique.mockRejectedValue(
         new Error("Database error"),
       );
 
@@ -82,7 +82,7 @@ describe("User API", () => {
     });
 
     it("should return 409 when email already exists", async () => {
-      prismaMock.users.findUnique.mockResolvedValue({
+      prismaMock.user.findUnique.mockResolvedValue({
         id: 1,
         email: "existing@example.com",
         password: "hashedPassword",
@@ -103,9 +103,9 @@ describe("User API", () => {
         password: "truePassword",
       };
 
-      prismaMock.users.findUnique.mockResolvedValue(null);
+      prismaMock.user.findUnique.mockResolvedValue(null);
 
-      prismaMock.users.createMany.mockResolvedValue({ count: 1 });
+      prismaMock.user.createMany.mockResolvedValue({ count: 1 });
 
       const response = await request(app).post("/users").send(mockUser);
 
@@ -113,7 +113,7 @@ describe("User API", () => {
     });
 
     it("should return 500 if an internal server error occurs", async () => {
-      prismaMock.users.findUnique.mockRejectedValue(
+      prismaMock.user.findUnique.mockRejectedValue(
         new Error("Database error"),
       );
 
@@ -138,7 +138,7 @@ describe("User API", () => {
     });
 
     it("should return 404 if user is not found", async () => {
-      prismaMock.users.findUnique.mockResolvedValue(null);
+      prismaMock.user.findUnique.mockResolvedValue(null);
 
       const response = await request(app)
         .patch("/users/1")
@@ -155,7 +155,7 @@ describe("User API", () => {
         email: "test@example.com",
         password: "truePassword",
       };
-      prismaMock.users.findUnique.mockResolvedValue(mockUser);
+      prismaMock.user.findUnique.mockResolvedValue(mockUser);
 
       const response = await request(app)
         .patch("/users/1")
@@ -178,8 +178,8 @@ describe("User API", () => {
         password: "newHashedPassword",
       };
 
-      prismaMock.users.findUnique.mockResolvedValue(mockUser);
-      prismaMock.users.update.mockResolvedValue(updatedUser);
+      prismaMock.user.findUnique.mockResolvedValue(mockUser);
+      prismaMock.user.update.mockResolvedValue(updatedUser);
 
       const response = await request(app)
         .patch("/users/1")
@@ -191,7 +191,7 @@ describe("User API", () => {
     });
 
     it("should return 500 if an internal server error occurs", async () => {
-      prismaMock.users.findUnique.mockRejectedValue(
+      prismaMock.user.findUnique.mockRejectedValue(
         new Error("Database error"),
       );
 
@@ -216,7 +216,7 @@ describe("User API", () => {
     });
 
     it("should return 404 if user is not found", async () => {
-      prismaMock.users.findUnique.mockResolvedValue(null);
+      prismaMock.user.findUnique.mockResolvedValue(null);
 
       const response = await request(app)
         .delete("/users/1")
@@ -232,8 +232,8 @@ describe("User API", () => {
         email: "test@example.com",
         password: "hashedPassword",
       };
-      prismaMock.users.findUnique.mockResolvedValue(mockUser);
-      prismaMock.users.delete.mockResolvedValue(mockUser);
+      prismaMock.user.findUnique.mockResolvedValue(mockUser);
+      prismaMock.user.delete.mockResolvedValue(mockUser);
 
       const response = await request(app)
         .delete("/users/1")
@@ -244,7 +244,7 @@ describe("User API", () => {
     });
 
     it("should return 500 if an internal server error occurs", async () => {
-      prismaMock.users.findUnique.mockRejectedValue(
+      prismaMock.user.findUnique.mockRejectedValue(
         new Error("Database error"),
       );
 
